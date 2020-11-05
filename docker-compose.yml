@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+ 
+  api:
+    image: eassbhhtgu/elgatoapi:latest
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+
+    ports:
+    - 46273:80/tcp
