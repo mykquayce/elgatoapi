@@ -8,9 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Helpers.Elgato" Version="1.0.0" />
-    <PackageReference Include="Helpers.Web" Version="2.0.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-    <PackageReference Include="System.Linq.Async" Version="4.1.1" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
