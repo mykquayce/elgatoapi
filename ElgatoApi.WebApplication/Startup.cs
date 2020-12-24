@@ -5,6 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
 namespace ElgatoApi.WebApplication
 {
@@ -25,9 +30,11 @@ namespace ElgatoApi.WebApplication
 				{
 					string getConfig(string key) => Configuration[key] ?? throw new KeyNotFoundException(key + " not found in config");
 
-					var endPoint = getConfig("Light:EndPoint");
+					var physicalAddress = PhysicalAddress.Parse(getConfig("Light:EndPoint"));
 
-					client.BaseAddress = new System.Uri("http://" + endPoint);
+					var endpoint = GetIPAddressFromPhysicalAddressAsync(physicalAddress).GetAwaiter().GetResult();
+
+					client.BaseAddress = new System.Uri($"http://{endpoint}:9123");
 				});
 
 			services
@@ -58,6 +65,26 @@ namespace ElgatoApi.WebApplication
 			{
 				endpoints.MapControllers();
 			});
+		}
+
+		private static async Task<IPAddress> GetIPAddressFromPhysicalAddressAsync(PhysicalAddress physicalAddress)
+		{
+			var path = Path.Combine(".", "arp.txt");
+
+			Helpers.Networking.Models.ArpResultsCollection arpResultsCollection;
+
+			if (File.Exists(path))
+			{
+				var text = File.ReadAllText(path);
+				arpResultsCollection = Helpers.Networking.Models.ArpResultsCollection.Parse(text);
+			}
+			else
+			{
+				await Helpers.Networking.NetworkHelpers.PingEntireNetworkAsync().AllAsync(_ => true);
+				arpResultsCollection = Helpers.Networking.NetworkHelpers.RunArpCommand();
+			}
+
+			return arpResultsCollection.GetIPAddressFromPhysicalAddress(physicalAddress);
 		}
 	}
 }

@@ -9,3 +9,5 @@ services:
       ASPNETCORE_URLS: http://+
     ports:
     - 46273:80/tcp
+    volumes:
+    - ./arp.txt:/app/arp.txt:ro
