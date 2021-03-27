@@ -4,12 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.NetworkInformation;
-using System.Threading.Tasks;
 
 namespace ElgatoApi.WebApplication
 {
@@ -22,19 +19,32 @@ namespace ElgatoApi.WebApplication
 
 		public IConfiguration Configuration { get; }
 
+		public string GetConfigValue(string key) => Configuration[key] ?? throw new KeyNotFoundException(key + " not found in config");
+
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services
-				.AddHttpClient<Helpers.Elgato.Clients.IElgatoClient, Helpers.Elgato.Clients.Concrete.ElgatoClient>(client =>
+				.AddHttpClient<Services.INetworkDiscoveryService, Services.Concrete.NetworkDiscoveryService>(client =>
 				{
-					string getConfig(string key) => Configuration[key] ?? throw new KeyNotFoundException(key + " not found in config");
+					// what should it look like here?
+					var uriString = GetConfigValue("EndPoints:NetworkDiscoveryApi");
+					var uri = new Uri(uriString);
+					client.BaseAddress = uri;
+				});
 
-					var physicalAddress = PhysicalAddress.Parse(getConfig("Light:EndPoint"));
+			services
+				.AddHttpClient<Helpers.Elgato.Clients.IElgatoClient, Helpers.Elgato.Clients.Concrete.ElgatoClient>((serviceProvider, client) =>
+				{
+					using var networkDiscoveryService = serviceProvider.GetRequiredService<Services.INetworkDiscoveryService>();
 
-					var endpoint = GetIPAddressFromPhysicalAddressAsync(physicalAddress).GetAwaiter().GetResult();
+					var physicalAddress = PhysicalAddress.Parse(GetConfigValue("Light:EndPoint"));
 
-					client.BaseAddress = new System.Uri($"http://{endpoint}:9123");
+					var endpoint = networkDiscoveryService.GetIPAddressFromPhysicalAddressAsync(physicalAddress).GetAwaiter().GetResult();
+
+					var config = new Helpers.Elgato.Clients.Concrete.ElgatoClient.Config(Host: endpoint.ToString());
+
+					client.BaseAddress = config.Uri;
 				});
 
 			services
@@ -65,26 +75,6 @@ namespace ElgatoApi.WebApplication
 			{
 				endpoints.MapControllers();
 			});
-		}
-
-		private static async Task<IPAddress> GetIPAddressFromPhysicalAddressAsync(PhysicalAddress physicalAddress)
-		{
-			var path = Path.Combine(".", "arp.txt");
-
-			Helpers.Networking.Models.ArpResultsCollection arpResultsCollection;
-
-			if (File.Exists(path))
-			{
-				var text = File.ReadAllText(path);
-				arpResultsCollection = Helpers.Networking.Models.ArpResultsCollection.Parse(text);
-			}
-			else
-			{
-				await Helpers.Networking.NetworkHelpers.PingEntireNetworkAsync().AllAsync(_ => true);
-				arpResultsCollection = Helpers.Networking.NetworkHelpers.RunArpCommand();
-			}
-
-			return arpResultsCollection.GetIPAddressFromPhysicalAddress(physicalAddress);
 		}
 	}
 }

@@ -1,19 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace ElgatoApi.WebApplication.Tests
 {
-	public class IntegrationTests : WebApplicationFactory<ElgatoApi.WebApplication.Startup>
+	public sealed class IntegrationTests : IDisposable
 	{
+		private readonly TestServer _testServer;
 		private readonly HttpClient _httpClient;
 
 		public IntegrationTests()
 		{
-			var options = new WebApplicationFactoryClientOptions { AllowAutoRedirect = false, };
+			var webHostBuilder = new WebHostBuilder()
+				.UseStartup<Startup>()
+				.ConfigureAppConfiguration(config =>
+				{
+					config
+						.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+						.AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+				});
 
-			_httpClient = base.CreateClient(options);
+			_testServer = new TestServer(webHostBuilder);
+			_httpClient = _testServer.CreateClient();
+		}
+
+		public void Dispose()
+		{
+			_httpClient.Dispose();
+			_testServer.Dispose();
 		}
 
 		[Fact]
