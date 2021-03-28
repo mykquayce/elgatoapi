@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readme.md = readme.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElgatoApi.Services.Tests", "ElgatoApi.Services.Tests\ElgatoApi.Services.Tests.csproj", "{0707179E-FD67-4387-9508-E84EFACD4AA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElgatoApi.Services", "ElgatoApi.Services\ElgatoApi.Services.csproj", "{3ACDE10E-26DD-4BF5-B986-035BF6106598}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +33,14 @@ Global
 		{60439082-6E88-4BFB-AF77-12A30A7FD2EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60439082-6E88-4BFB-AF77-12A30A7FD2EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60439082-6E88-4BFB-AF77-12A30A7FD2EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0707179E-FD67-4387-9508-E84EFACD4AA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0707179E-FD67-4387-9508-E84EFACD4AA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0707179E-FD67-4387-9508-E84EFACD4AA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0707179E-FD67-4387-9508-E84EFACD4AA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ACDE10E-26DD-4BF5-B986-035BF6106598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ACDE10E-26DD-4BF5-B986-035BF6106598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ACDE10E-26DD-4BF5-B986-035BF6106598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ACDE10E-26DD-4BF5-B986-035BF6106598}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
