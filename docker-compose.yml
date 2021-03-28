@@ -7,7 +7,31 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+
+      EndPoints:NetworkDiscoveryApi: http://discovery
     ports:
     - 46273:80/tcp
-    volumes:
-    - ./arp.txt:/app/arp.txt:ro
+
+  discovery:
+    image: eassbhhtgu/networkdiscoveryapi:latest
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+
+    secrets:
+    - source: Host
+    - source: Port
+    - source: Username
+    - source: Password
+
+secrets:
+  Host:
+    external: true
+    name: RouterHost
+  Port:
+    external: true
+    name: RouterPort
+  Username:
+    external: true
+    name: RouterUsername
+  Password:
+    external: true
+    name: RouterPassword

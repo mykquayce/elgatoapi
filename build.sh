@@ -1,8 +1,11 @@
 #! /bin/bash
 
-docker pull mcr.microsoft.com/dotnet/aspnet:5.0
-docker pull mcr.microsoft.com/dotnet/sdk:5.0
+# pull base images
+docker pull mcr.microsoft.com/dotnet/aspnet:6.0
+docker pull mcr.microsoft.com/dotnet/sdk:6.0
 
+# build
 docker build --tag eassbhhtgu/elgatoapi:latest .
 
+# push
 docker push eassbhhtgu/elgatoapi:latest
