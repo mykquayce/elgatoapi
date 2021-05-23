@@ -16,22 +16,14 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+
+      Router:PathToPrivateKey: /run/secrets/id_rsa
+      Router:PathToPublicKey: /run/secrets/id_rsa.pub
     secrets:
-    - source: Host
-    - source: Port
-    - source: Username
-    - source: Password
+    - source: id_rsa
+    - source: id_rsa.pub
 
 secrets:
-  Host:
-    external: true
-    name: RouterHost
-  Port:
-    external: true
-    name: RouterPort
-  Username:
-    external: true
-    name: RouterUsername
-  Password:
-    external: true
-    name: RouterPassword
+  id_rsa:
+    file: ${USERPROFILE}\.ssh\id_rsa
+  id_rsa.pub:
+    file: ${USERPROFILE}\.ssh\id_rsa.pub

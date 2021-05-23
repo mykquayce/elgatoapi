@@ -4,9 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
 
 namespace ElgatoApi.WebApplication
 {
@@ -19,36 +16,24 @@ namespace ElgatoApi.WebApplication
 
 		public IConfiguration Configuration { get; }
 
-		public string GetConfigValue(string key) => Configuration[key] ?? throw new KeyNotFoundException(key + " not found in config");
-
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services
-				.AddHttpClient<Services.INetworkDiscoveryService, Services.Concrete.NetworkDiscoveryService>(client =>
+				.JsonConfig<Services.Concrete.LightsService.EndPoints>(Configuration.GetSection(nameof(Services.Concrete.LightsService.EndPoints)))
+				.JsonConfig<Helpers.Elgato.Concrete.ElgatoClient.Config>(Configuration.GetSection("Elgato"));
+
+			services
+				.AddHttpClient<Services.INetworkDiscoveryService, Services.Concrete.NetworkDiscoveryService>((serviceProvider, client) =>
 				{
-					// what should it look like here?
-					var uriString = GetConfigValue("EndPoints:NetworkDiscoveryApi");
-					var uri = new Uri(uriString);
-					client.BaseAddress = uri;
+					var options = serviceProvider.GetRequiredService<Microsoft.Extensions.Options.IOptions<Services.Concrete.LightsService.EndPoints>>();
+					var endPoints = options.Value;
+					client.BaseAddress = endPoints.NetworkDiscoveryApi;
 				});
 
 			services
-				.AddHttpClient<Helpers.Elgato.Clients.IElgatoClient, Helpers.Elgato.Clients.Concrete.ElgatoClient>((serviceProvider, client) =>
-				{
-					using var networkDiscoveryService = serviceProvider.GetRequiredService<Services.INetworkDiscoveryService>();
-
-					var physicalAddress = PhysicalAddress.Parse(GetConfigValue("Light:EndPoint"));
-
-					var endpoint = networkDiscoveryService.GetIPAddressFromPhysicalAddressAsync(physicalAddress).GetAwaiter().GetResult();
-
-					var config = new Helpers.Elgato.Clients.Concrete.ElgatoClient.Config(Host: endpoint.ToString());
-
-					client.BaseAddress = config.Uri;
-				});
-
-			services
-				.AddTransient<Helpers.Elgato.Services.IElgatoService, Helpers.Elgato.Services.Concrete.ElgatoService>();
+				.AddTransient<Helpers.Elgato.IElgatoClient, Helpers.Elgato.Concrete.ElgatoClient>()
+				.AddTransient<Services.ILightsService, Services.Concrete.LightsService>();
 
 			services.AddControllers();
 			services.AddSwaggerGen(c =>

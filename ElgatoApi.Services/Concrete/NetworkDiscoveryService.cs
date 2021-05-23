@@ -16,15 +16,14 @@ namespace ElgatoApi.Services.Concrete
 			: base(httpClient)
 		{ }
 
-		public async IAsyncEnumerable<Helpers.Networking.Models.DhcpEntry> GetDhcpEntriesAsync()
+		public async IAsyncEnumerable<Helpers.Networking.Models.DhcpLease> GetDhcpEntriesAsync()
 		{
 			var uri = new Uri("api/router", UriKind.Relative);
-			var (_, _, _, entries) = await base.SendAsync<NetworkDiscoveryApi.Models.DhcpEntry[]>(HttpMethod.Get, uri);
+			var (_, _, _, entries) = await base.SendAsync<Helpers.Networking.Models.DhcpLease[]>(HttpMethod.Get, uri);
 
 			foreach (var entry in entries)
 			{
-				var o = (Helpers.Networking.Models.DhcpEntry)entry;
-				yield return o;
+				yield return entry;
 			}
 		}
 

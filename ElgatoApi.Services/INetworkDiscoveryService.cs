@@ -8,7 +8,7 @@ namespace ElgatoApi.Services
 {
 	public interface INetworkDiscoveryService : IDisposable
 	{
-		IAsyncEnumerable<Helpers.Networking.Models.DhcpEntry> GetDhcpEntriesAsync();
+		IAsyncEnumerable<Helpers.Networking.Models.DhcpLease> GetDhcpEntriesAsync();
 		Task<IPAddress> GetIPAddressFromPhysicalAddressAsync(PhysicalAddress physicalAddress);
 	}
 }

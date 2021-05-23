@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dawn;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace ElgatoApi.WebApplication.Controllers
@@ -7,24 +8,24 @@ namespace ElgatoApi.WebApplication.Controllers
 	[Route("[controller]")]
 	public class LightsController : Controller
 	{
-		public readonly Helpers.Elgato.Services.IElgatoService _service;
+		private readonly Services.ILightsService _lightsService;
 
-		public LightsController(Helpers.Elgato.Services.IElgatoService service)
+		public LightsController(Services.ILightsService lightsService)
 		{
-			_service = service;
+			_lightsService = Guard.Argument(() => lightsService).NotNull().Value;
 		}
 
 		[HttpGet]
 		public async Task<IActionResult> GetAsync()
 		{
-			var light = await _service.GetLightAsync();
+			var light = await _lightsService.GetLightAsync();
 			return Ok(light);
 		}
 
 		[HttpPut]
 		public async Task<IActionResult> PutAsync()
 		{
-			await _service.ToggleLightPowerStateAsync();
+			await _lightsService.ToggleLightPowerStateAsync();
 			return Ok();
 		}
 	}
