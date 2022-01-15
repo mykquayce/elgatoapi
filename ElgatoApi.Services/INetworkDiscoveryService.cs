@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.NetworkInformation;
-using System.Threading.Tasks;
 
-namespace ElgatoApi.Services
+namespace ElgatoApi.Services;
+
+public interface INetworkDiscoveryService
 {
-	public interface INetworkDiscoveryService
-	{
-		IAsyncEnumerable<Helpers.Networking.Models.DhcpLease> GetDhcpEntriesAsync();
-		Task<IPAddress> GetIPAddressFromPhysicalAddressAsync(PhysicalAddress physicalAddress);
-	}
+	IAsyncEnumerable<Helpers.Networking.Models.DhcpLease> GetDhcpEntriesAsync();
+	Task<IPAddress> GetIPAddressFromPhysicalAddressAsync(PhysicalAddress physicalAddress);
 }

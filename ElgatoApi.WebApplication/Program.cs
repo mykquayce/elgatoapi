@@ -1,36 +1,43 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading.Tasks;
+var builder = WebApplication.CreateBuilder(args);
 
-namespace ElgatoApi.WebApplication
-{
-	public class Program
+// Add services to the container.
+builder.Services
+	.JsonConfig<ElgatoApi.Services.Concrete.LightsService.EndPoints>(builder.Configuration.GetSection(nameof(ElgatoApi.Services.Concrete.LightsService.EndPoints)))
+	.JsonConfig<Helpers.Elgato.Concrete.ElgatoClient.Config>(builder.Configuration.GetSection("Elgato"));
+
+builder.Services
+	.AddHttpClient<ElgatoApi.Services.INetworkDiscoveryService, ElgatoApi.Services.Concrete.NetworkDiscoveryService>((serviceProvider, client) =>
 	{
-		public static Task Main(string[] args) => CreateHostBuilder(args).RunConsoleAsync();
+		var baseAddress = new Uri(builder.Configuration["EndPoints:NetworkDiscoveryApi"]);
+		client.BaseAddress = baseAddress;
+	});
 
-		public static IHostBuilder CreateHostBuilder(string[] args)
-		{
-			var hostBuilder = Host.CreateDefaultBuilder(args);
-/*
-			hostBuilder
-				.ConfigureAppConfiguration((context, configBuilder) =>
-				{
-					var environment = context.HostingEnvironment.EnvironmentName;
-					var production = string.Equals(environment, Environments.Production, StringComparison.InvariantCultureIgnoreCase);
+builder.Services
+	.AddTransient<Helpers.Elgato.IElgatoClient, Helpers.Elgato.Concrete.ElgatoClient>()
+	.AddTransient<Helpers.Elgato.IElgatoService, Helpers.Elgato.Concrete.ElgatoService>()
+	.AddTransient<ElgatoApi.Services.ILightsService, ElgatoApi.Services.Concrete.LightsService>();
 
-					configBuilder
-						.AddDockerSecrets(optional: !production, reloadOnChange: true);
-				});*/
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-			hostBuilder
-				.ConfigureWebHostDefaults(webBuilder =>
-				{
-					webBuilder.UseStartup<Startup>();
-				});
+var app = builder.Build();
 
-			return hostBuilder;
-		}
-	}
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1050:Declare types in namespaces", Justification = "needed by the integration tests")]
+public partial class Program { }
