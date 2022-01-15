@@ -33,6 +33,7 @@ namespace ElgatoApi.WebApplication
 
 			services
 				.AddTransient<Helpers.Elgato.IElgatoClient, Helpers.Elgato.Concrete.ElgatoClient>()
+				.AddTransient<Helpers.Elgato.IElgatoService, Helpers.Elgato.Concrete.ElgatoService>()
 				.AddTransient<Services.ILightsService, Services.Concrete.LightsService>();
 
 			services.AddControllers();

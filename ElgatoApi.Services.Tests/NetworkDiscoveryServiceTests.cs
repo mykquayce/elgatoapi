@@ -7,7 +7,7 @@ using Xunit;
 
 namespace ElgatoApi.Services.Tests
 {
-	public sealed class NetworkDiscoveryServiceTests : IDisposable
+	public sealed class NetworkDiscoveryServiceTests
 	{
 		private readonly INetworkDiscoveryService _sut;
 
@@ -17,8 +17,6 @@ namespace ElgatoApi.Services.Tests
 			var httpClient = new HttpClient(handler) { BaseAddress = new Uri("http://localhost:34785"), };
 			_sut = new Concrete.NetworkDiscoveryService(httpClient);
 		}
-
-		public void Dispose() => _sut.Dispose();
 
 		[Fact]
 		public async Task GetDhcpEntries()

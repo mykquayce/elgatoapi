@@ -18,8 +18,8 @@ namespace ElgatoApi.WebApplication.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetAsync()
 		{
-			var light = await _lightsService.GetLightAsync();
-			return Ok(light);
+			var (on, brightness, kelvins) = await _lightsService.GetLightAsync();
+			return Ok(new { on, brightness, kelvins, });
 		}
 
 		[HttpPut]

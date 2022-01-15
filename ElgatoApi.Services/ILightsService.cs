@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace ElgatoApi.Services
 {
-	public interface ILightsService : IDisposable
+	public interface ILightsService
 	{
-		Task<Helpers.Elgato.Models.MessageObject.LightObject> GetLightAsync();
+		Task<(bool on, double brightness, short kelvins)> GetLightAsync();
 		Task ToggleLightPowerStateAsync();
 	}
 }
