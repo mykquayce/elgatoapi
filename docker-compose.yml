@@ -6,10 +6,17 @@ services:
     image: eassbhhtgu/elgatoapi:latest
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ASPNETCORE_URLS: http://+
+      ASPNETCORE_HTTPS_PORT: "443"
+      ASPNETCORE_URLS: http://+,https://+
       EndPoints:NetworkDiscoveryApi: http://discovery
+      Kestrel:Certificates:Default:KeyPath: /run/secrets/localhost.key
+      Kestrel:Certificates:Default:Path: /run/secrets/localhost.crt
     ports:
     - 46273:80/tcp
+    - 46274:443/tcp
+    secrets:
+    - source: localhost.crt
+    - source: localhost.key
 
   discovery:
     image: eassbhhtgu/networkdiscoveryapi:latest
@@ -27,3 +34,9 @@ secrets:
     file: ${USERPROFILE}\.ssh\id_rsa
   id_rsa.pub:
     file: ${USERPROFILE}\.ssh\id_rsa.pub
+  localhost.crt:
+    external: true
+    name: localhost.crt
+  localhost.key:
+    external: true
+    name: localhost.key
