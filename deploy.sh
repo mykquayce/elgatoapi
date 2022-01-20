@@ -1,13 +1,16 @@
 #! /bin/bash
 
-# the Network Discovery API uses four Docker secrets
-# promote environment variables to Docker secrets
-for s in RouterHost RouterPort RouterUsername RouterPassword
-do
-	docker secret ls | tail --line=2 | grep $s
+# grab all the certificates files in ~/.aspnet/https, and make them Docker secrets
 
-	if [ $? -ne 0 ]; then
-		echo -n ${!s} | docker secret create $s -
+for path in ~/.aspnet/https/*.crt ~/.aspnet/https/*.key;
+do
+	
+	if [ -f "$path" ]; then
+		filename=$(basename "$path")
+		docker secret ls --format '{{.Name}}' | findstr "$filename"
+		if [ $? -ne 0 ]; then
+			docker secret create "$filename" "$path"
+		fi
 	fi
 done
 

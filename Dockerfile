@@ -5,8 +5,10 @@ RUN dotnet restore --source https://api.nuget.org/v3/index.json --source http://
 RUN dotnet publish ElgatoApi.WebApplication/ElgatoApi.WebApplication.csproj --configuration Release --output /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
-EXPOSE 80/tcp 443/tcp
+EXPOSE 443/tcp
 ENV ASPNETCORE_ENVIRONMENT=Production
+ADD ./ca.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates
 WORKDIR /app
 COPY --from=build-env /app/publish .
 ENTRYPOINT ["dotnet", "ElgatoApi.WebApplication.dll"]

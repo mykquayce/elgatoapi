@@ -8,8 +8,8 @@ RouterPassword=
 ```
 ## Running
 ```bash
-curl --header 'Content-Length: 0' --request PUT --url http://localhost:46273/lights
+curl --header 'Content-Length: 0' --request PUT --url https://localhost:46274/lights
 ```
 ```powershell
-curl -Headers @{"Content-Length"=0} -Method Put -Uri http://localhost:46273/lights
+curl -Headers @{"Content-Length"=0} -Method Put -Uri https://localhost:46274/lights
 ```

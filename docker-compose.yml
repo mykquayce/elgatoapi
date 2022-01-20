@@ -7,12 +7,11 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HTTPS_PORT: "443"
-      ASPNETCORE_URLS: http://+,https://+
-      EndPoints:NetworkDiscoveryApi: http://discovery
+      ASPNETCORE_URLS: https://+
+      EndPoints:NetworkDiscoveryApi: https://discovery
       Kestrel:Certificates:Default:KeyPath: /run/secrets/localhost.key
       Kestrel:Certificates:Default:Path: /run/secrets/localhost.crt
     ports:
-    - 46273:80/tcp
     - 46274:443/tcp
     secrets:
     - source: localhost.crt
@@ -22,18 +21,24 @@ services:
     image: eassbhhtgu/networkdiscoveryapi:latest
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      ASPNETCORE_URLS: http://+
+      ASPNETCORE_URLS: https://+
+      Kestrel:Certificates:Default:KeyPath: /run/secrets/discovery.key
+      Kestrel:Certificates:Default:Path: /run/secrets/discovery.crt
       Router:PathToPrivateKey: /run/secrets/id_rsa
-      Router:PathToPublicKey: /run/secrets/id_rsa.pub
     secrets:
+    - source: discovery.crt
+    - source: discovery.key
     - source: id_rsa
-    - source: id_rsa.pub
 
 secrets:
   id_rsa:
     file: ${USERPROFILE}\.ssh\id_rsa
-  id_rsa.pub:
-    file: ${USERPROFILE}\.ssh\id_rsa.pub
+  discovery.crt:
+    external: true
+    name: discovery.crt
+  discovery.key:
+    external: true
+    name: discovery.key
   localhost.crt:
     external: true
     name: localhost.crt

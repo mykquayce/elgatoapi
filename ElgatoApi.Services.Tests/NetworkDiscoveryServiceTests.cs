@@ -10,7 +10,7 @@ public sealed class NetworkDiscoveryServiceTests
 	public NetworkDiscoveryServiceTests()
 	{
 		var handler = new HttpClientHandler { AllowAutoRedirect = false, };
-		var httpClient = new HttpClient(handler) { BaseAddress = new Uri("http://localhost:34785"), };
+		var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://localhost:34786"), };
 		_sut = new Concrete.NetworkDiscoveryService(httpClient);
 	}
 
