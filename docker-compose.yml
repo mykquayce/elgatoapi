@@ -4,6 +4,7 @@ services:
  
   api:
     image: eassbhhtgu/elgatoapi:latest
+    entrypoint: bash -c "/usr/sbin/update-ca-certificates && dotnet ElgatoApi.WebApplication.dll"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_HTTPS_PORT: "443"
@@ -16,11 +17,14 @@ services:
     secrets:
     - source: localhost.crt
     - source: localhost.key
+    volumes:
+    - ~/.aspnet/https/ca.crt:/usr/local/share/ca-certificates/ca.crt:ro
 
   discovery:
     image: eassbhhtgu/networkdiscoveryapi:latest
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTPS_PORT: "443"
       ASPNETCORE_URLS: https://+
       Kestrel:Certificates:Default:KeyPath: /run/secrets/discovery.key
       Kestrel:Certificates:Default:Path: /run/secrets/discovery.crt
