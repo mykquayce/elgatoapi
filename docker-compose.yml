@@ -17,8 +17,8 @@ services:
     secrets:
     - source: localhost.crt
     - source: localhost.key
-    volumes:
-    - ~/.aspnet/https/ca.crt:/usr/local/share/ca-certificates/ca.crt:ro
+    - source: ca.crt
+      target: /usr/local/share/ca-certificates/ca.crt
 
   discovery:
     image: eassbhhtgu/networkdiscoveryapi:latest
@@ -37,15 +37,13 @@ services:
 secrets:
   id_rsa:
     file: ${USERPROFILE}\.ssh\id_rsa
+  ca.crt:
+    file: ${USERPROFILE}\.aspnet\https\ca.crt
   discovery.crt:
-    external: true
-    name: discovery.crt
+    file: ${USERPROFILE}\.aspnet\https\discovery.crt
   discovery.key:
-    external: true
-    name: discovery.key
+    file: ${USERPROFILE}\.aspnet\https\discovery.key
   localhost.crt:
-    external: true
-    name: localhost.crt
+    file: ${USERPROFILE}\.aspnet\https\localhost.crt
   localhost.key:
-    external: true
-    name: localhost.key
+    file: ${USERPROFILE}\.aspnet\https\localhost.key
