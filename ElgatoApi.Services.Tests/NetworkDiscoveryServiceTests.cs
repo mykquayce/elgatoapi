@@ -3,15 +3,13 @@ using Xunit;
 
 namespace ElgatoApi.Services.Tests;
 
-public sealed class NetworkDiscoveryServiceTests
+public sealed class NetworkDiscoveryServiceTests : IClassFixture<Fixtures.NetworkDiscoveryServiceFixture>
 {
 	private readonly INetworkDiscoveryService _sut;
 
-	public NetworkDiscoveryServiceTests()
+	public NetworkDiscoveryServiceTests(Fixtures.NetworkDiscoveryServiceFixture fixture)
 	{
-		var handler = new HttpClientHandler { AllowAutoRedirect = false, };
-		var httpClient = new HttpClient(handler) { BaseAddress = new Uri("https://localhost:34786"), };
-		_sut = new Concrete.NetworkDiscoveryService(httpClient);
+		_sut = fixture.NetworkDiscoveryService;
 	}
 
 	[Fact]

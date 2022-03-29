@@ -1,16 +1,23 @@
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
+	.JsonConfig<ElgatoApi.WebApplication.Endpoints>(builder.Configuration.GetSection(nameof(ElgatoApi.WebApplication.Endpoints)))
 	.JsonConfig<ElgatoApi.Services.Concrete.LightsService.EndPoints>(builder.Configuration.GetSection(nameof(ElgatoApi.Services.Concrete.LightsService.EndPoints)))
 	.JsonConfig<Helpers.Elgato.Concrete.ElgatoClient.Config>(builder.Configuration.GetSection("Elgato"));
 
 builder.Services
+	.AddIdentityClient(builder.Configuration.GetSection("Identity"));
+
+builder.Services
 	.AddHttpClient<ElgatoApi.Services.INetworkDiscoveryService, ElgatoApi.Services.Concrete.NetworkDiscoveryService>((serviceProvider, client) =>
 	{
-		var baseAddress = new Uri(builder.Configuration["EndPoints:NetworkDiscoveryApi"]);
-		client.BaseAddress = baseAddress;
-	});
+		var options = serviceProvider.GetRequiredService<IOptions<ElgatoApi.WebApplication.Endpoints>>();
+		client.BaseAddress = options.Value.NetworkDiscoveryApi;
+	})
+	.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false, });
 
 builder.Services
 	.AddTransient<Helpers.Elgato.IElgatoClient, Helpers.Elgato.Concrete.ElgatoClient>()

@@ -4,10 +4,10 @@ using System.Net.NetworkInformation;
 
 namespace ElgatoApi.Services.Concrete;
 
-public class NetworkDiscoveryService : Helpers.Web.WebClientBase, INetworkDiscoveryService
+public class NetworkDiscoveryService : Helpers.Identity.SecureWebClientBase, INetworkDiscoveryService
 {
-	public NetworkDiscoveryService(HttpClient httpClient)
-		: base(httpClient)
+	public NetworkDiscoveryService(HttpClient httpClient, Helpers.Identity.Clients.IIdentityClient identityClient)
+		: base(httpClient, identityClient)
 	{ }
 
 	public async IAsyncEnumerable<Helpers.Networking.Models.DhcpLease> GetDhcpEntriesAsync()

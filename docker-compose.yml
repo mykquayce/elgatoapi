@@ -7,11 +7,15 @@ services:
     entrypoint: bash -c "/usr/sbin/update-ca-certificates && dotnet ElgatoApi.WebApplication.dll"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_Kestrel__Certificates__Default__KeyPath: /run/secrets/localhost.key
+      ASPNETCORE_Kestrel__Certificates__Default__Path: /run/secrets/localhost.crt
       ASPNETCORE_HTTPS_PORT: "443"
       ASPNETCORE_URLS: https://+
-      EndPoints:NetworkDiscoveryApi: https://discovery
-      Kestrel:Certificates:Default:KeyPath: /run/secrets/localhost.key
-      Kestrel:Certificates:Default:Path: /run/secrets/localhost.crt
+      EndPoints:NetworkDiscoveryApi: https://networkdiscovery
+      Identity:Authority: https://identityserver
+      Identity:ClientId: elgatoapi
+      Identity:ClientSecret: 8556e52c6ab90d042bb83b3f0c8894498beeb65cf908f519a2152aceb131d3ee
+      Identity:Scope: networkdiscovery
     ports:
     - 46274:443/tcp
     secrets:
@@ -20,30 +24,12 @@ services:
     - source: ca.crt
       target: /usr/local/share/ca-certificates/ca.crt
 
-  discovery:
-    image: eassbhhtgu/networkdiscoveryapi:latest
-    environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      ASPNETCORE_HTTPS_PORT: "443"
-      ASPNETCORE_URLS: https://+
-      Kestrel:Certificates:Default:KeyPath: /run/secrets/discovery.key
-      Kestrel:Certificates:Default:Path: /run/secrets/discovery.crt
-      Router:PathToPrivateKey: /run/secrets/id_rsa
-    secrets:
-    - source: discovery.crt
-    - source: discovery.key
-    - source: id_rsa
-
 secrets:
   id_rsa:
     file: ${USERPROFILE}\.ssh\id_rsa
   ca.crt:
     file: ${USERPROFILE}\.aspnet\https\ca.crt
-  discovery.crt:
-    file: ${USERPROFILE}\.aspnet\https\discovery.crt
-  discovery.key:
-    file: ${USERPROFILE}\.aspnet\https\discovery.key
   localhost.crt:
-    file: ${USERPROFILE}\.aspnet\https\localhost.crt
+    file: ${USERPROFILE}\.aspnet\https\elgatoapi.crt
   localhost.key:
-    file: ${USERPROFILE}\.aspnet\https\localhost.key
+    file: ${USERPROFILE}\.aspnet\https\elgatoapi.key
