@@ -27,5 +27,9 @@ public class IdentityClientFixture : IDisposable
 	public IIdentityClient IdentityClient { get; }
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "derived types don't implement finalizers")]
-	public void Dispose() => _httpClient.Dispose();
+	public void Dispose()
+	{
+		_httpClient.Dispose();
+		_memoryCache.Dispose();
+	}
 }

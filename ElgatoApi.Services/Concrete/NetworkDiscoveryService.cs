@@ -10,25 +10,15 @@ public class NetworkDiscoveryService : Helpers.Identity.SecureWebClientBase, INe
 		: base(httpClient, identityClient)
 	{ }
 
-	public async IAsyncEnumerable<Helpers.Networking.Models.DhcpLease> GetDhcpEntriesAsync()
-	{
-		var uri = new Uri("api/router", UriKind.Relative);
-		var (_, _, entries) = await base.SendAsync<Helpers.Networking.Models.DhcpLease[]>(HttpMethod.Get, uri);
-
-		foreach (var entry in entries)
-		{
-			yield return entry;
-		}
-	}
-
 	public async Task<IPAddress> GetIPAddressFromPhysicalAddressAsync(PhysicalAddress physicalAddress)
 	{
-		Guard.Argument(() => physicalAddress).NotNull();
-		var entry = await GetDhcpEntriesAsync()
-			.SingleOrDefaultAsync(e => e.PhysicalAddress.Equals(physicalAddress));
+		Guard.Argument(() => physicalAddress).NotNull().Require(a => !a.Equals(PhysicalAddress.None), _ => "address cannot be empty");
 
-		if (entry is null) throw new KeyNotFoundException($"{physicalAddress} not found");
+		var uri = new Uri("api/router/" + physicalAddress, UriKind.Relative);
+		var (_, _, entry) = await base.SendAsync<Helpers.Networking.Models.DhcpLease>(HttpMethod.Get, uri);
 
-		return entry.IPAddress;
+		(_, _, var ip, _, _) = entry;
+
+		return ip;
 	}
 }

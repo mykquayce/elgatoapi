@@ -12,22 +12,6 @@ public sealed class NetworkDiscoveryServiceTests : IClassFixture<Fixtures.Networ
 		_sut = fixture.NetworkDiscoveryService;
 	}
 
-	[Fact]
-	public async Task GetDhcpEntries()
-	{
-		var entries = await _sut.GetDhcpEntriesAsync().ToListAsync();
-
-		Assert.NotNull(entries);
-		Assert.NotEmpty(entries);
-
-		foreach (var (expiration, physicalAddress, ipAddress, _, _) in entries)
-		{
-			Assert.NotEqual(default, expiration);
-			Assert.NotNull(physicalAddress);
-			Assert.NotNull(ipAddress);
-		}
-	}
-
 	[Theory]
 	[InlineData("3c6a9d14d765", 192, 168, 1)]
 	public async Task GetIPAddressFromPhysicalAddress(string physicalAddressString, params int[] octets)
