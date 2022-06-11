@@ -1,7 +1,9 @@
-﻿namespace ElgatoApi.Services;
+﻿using System.Drawing;
+
+namespace ElgatoApi.Services;
 
 public interface ILightsService
 {
-	Task<(bool on, double brightness, short kelvins)> GetLightAsync();
-	Task ToggleLightPowerStateAsync();
+	Task<(bool on, float brightness, Color? color, short? kelvins)> GetLightAsync(string alias, CancellationToken? cancellationToken = default);
+	Task ToggleLightPowerStateAsync(string alias, CancellationToken? cancellationToken = default);
 }

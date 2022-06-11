@@ -17,14 +17,14 @@ public class LightsController : ControllerBase
 	[HttpGet]
 	public async Task<IActionResult> GetAsync()
 	{
-		var (on, brightness, kelvins) = await _lightsService.GetLightAsync();
+		var (on, brightness, color, kelvins) = await _lightsService.GetLightAsync("keylight");
 		return Ok(new { on, brightness, kelvins, });
 	}
 
 	[HttpPut]
 	public async Task<IActionResult> PutAsync()
 	{
-		await _lightsService.ToggleLightPowerStateAsync();
+		await _lightsService.ToggleLightPowerStateAsync("keylight");
 		return Ok();
 	}
 }
