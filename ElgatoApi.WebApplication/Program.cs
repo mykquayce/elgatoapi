@@ -6,7 +6,7 @@ builder.Services
 	.JsonConfig<Helpers.Elgato.Config>(builder.Configuration.GetSection("Elgato"));
 
 builder.Services
-	.AddAliasResolver(builder.Configuration);
+	.AddNetworkDiscoveryApi(builder.Configuration);
 
 builder.Services
 	.AddTransient<Helpers.Elgato.IClient, Helpers.Elgato.Concrete.Client>()

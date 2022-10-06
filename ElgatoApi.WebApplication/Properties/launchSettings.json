@@ -9,8 +9,8 @@
       "applicationUrl": "https://elgatoapi:49587",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_Kestrel__Certificates__Default__Path": "C:\\Users\\bob\\.aspnet\\https\\elgatoapi.crt",
-        "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "C:\\Users\\bob\\.aspnet\\https\\elgatoapi.key"
+        "ASPNETCORE_Kestrel__Certificates__Default__Path": "%userprofile%\\.aspnet\\https\\elgatoapi.crt",
+        "ASPNETCORE_Kestrel__Certificates__Default__KeyPath": "%userprofile%\\.aspnet\\https\\elgatoapi.key"
       }
     }
   }
