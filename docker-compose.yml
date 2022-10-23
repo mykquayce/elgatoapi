@@ -11,8 +11,8 @@ services:
       ASPNETCORE_Kestrel__Certificates__Default__Path: /run/secrets/localhost.crt
       ASPNETCORE_HTTPS_PORT: "443"
       ASPNETCORE_URLS: https://+
-      EndPoints:NetworkDiscoveryApi: https://networkdiscovery
-      Identity:Authority: https://identityserver
+      NetworkDiscovery:BaseAddress: https://networkdiscovery/
+      Identity:Authority: https://identityserver/
       Identity:ClientId: elgatoapi
       Identity:ClientSecret: 8556e52c6ab90d042bb83b3f0c8894498beeb65cf908f519a2152aceb131d3ee
       Identity:Scope: networkdiscovery

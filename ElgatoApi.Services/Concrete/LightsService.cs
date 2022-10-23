@@ -6,22 +6,22 @@ namespace ElgatoApi.Services.Concrete;
 public class LightsService : ILightsService
 {
 	private readonly Helpers.Elgato.IService _elgatoService;
-	private readonly Helpers.NetworkDiscoveryApi.IService _networkDiscoveryService;
+	private readonly Helpers.NetworkDiscovery.IClient _networkDiscoveryClient;
 
 	public LightsService(
 		Helpers.Elgato.IService elgatoService,
-		Helpers.NetworkDiscoveryApi.IService networkDiscoveryService)
+		Helpers.NetworkDiscovery.IClient networkDiscoveryClient)
 	{
 		_elgatoService = Guard.Argument(elgatoService).NotNull().Value;
-		_networkDiscoveryService = Guard.Argument(networkDiscoveryService).NotNull().Value;
+		_networkDiscoveryClient = Guard.Argument(networkDiscoveryClient).NotNull().Value;
 	}
 
-	public async Task<(bool on, float brightness, Color? color, short? kelvins)> GetLightAsync(string alias, CancellationToken? cancellationToken = default)
+	public async Task<(bool on, float brightness, Color? color, short? kelvins)> GetLightAsync(string alias, CancellationToken cancellationToken = default)
 	{
-		(_, _, var ip, _, _) = await _networkDiscoveryService.GetLeaseAsync(alias, cancellationToken);
+		(_, _, var ip, _, _) = await _networkDiscoveryClient.ResolveAsync(alias, cancellationToken);
 
 		var light = await _elgatoService.GetLightStatusAsync(ip, cancellationToken)
-			.FirstAsync(cancellationToken ?? CancellationToken.None)
+			.FirstAsync(cancellationToken)
 			.AsTask();
 
 		if (light is Helpers.Elgato.Models.Lights.RgbLightModel rgb)
@@ -37,9 +37,9 @@ public class LightsService : ILightsService
 		return (light.On, light.Brightness, null, null);
 	}
 
-	public async Task ToggleLightPowerStateAsync(string alias, CancellationToken? cancellationToken = default)
+	public async Task ToggleLightPowerStateAsync(string alias, CancellationToken cancellationToken = default)
 	{
-		(_, _, var ip, _, _) = await _networkDiscoveryService.GetLeaseAsync(alias, cancellationToken);
+		(_, _, var ip, _, _) = await _networkDiscoveryClient.ResolveAsync(alias, cancellationToken);
 		await _elgatoService.TogglePowerStateAsync(ip, cancellationToken);
 	}
 }

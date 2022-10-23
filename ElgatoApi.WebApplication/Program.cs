@@ -2,11 +2,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
-	.Configure<Helpers.NetworkDiscoveryApi.Aliases>(builder.Configuration.GetSection("Aliases"))
-	.JsonConfig<Helpers.Elgato.Config>(builder.Configuration.GetSection("Elgato"));
+	.Configure<Helpers.NetworkDiscovery.Config>(builder.Configuration.GetSection("NetworkDiscovery"))
+	.Configure<Helpers.Identity.Config>(builder.Configuration.GetSection("Identity"))
+	.Configure<Helpers.Elgato.Config>(builder.Configuration.GetSection("Elgato"));
 
 builder.Services
-	.AddNetworkDiscoveryApi(builder.Configuration);
+	.AddNetworkDiscovery();
 
 builder.Services
 	.AddTransient<Helpers.Elgato.IClient, Helpers.Elgato.Concrete.Client>()
