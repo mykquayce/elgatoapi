@@ -9,12 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElgatoApi.WebApplication.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B1AEA6E5-7EE2-4217-9EA8-70EF59B4172D}"
 	ProjectSection(SolutionItems) = preProject
-		certs-dockerfile = certs-dockerfile
 		docker-compose.yml = docker-compose.yml
 		deploy.ps1 = deploy.ps1
 		build.ps1 = build.ps1
 		Dockerfile = Dockerfile
-		readme.md = readme.md
+		refresh.ps1 = refresh.ps1
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElgatoApi.Services.Tests", "ElgatoApi.Services.Tests\ElgatoApi.Services.Tests.csproj", "{0707179E-FD67-4387-9508-E84EFACD4AA0}"

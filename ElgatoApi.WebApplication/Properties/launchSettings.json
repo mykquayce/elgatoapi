@@ -6,7 +6,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "lights",
-      "applicationUrl": "https://elgatoapi:49587",
+      "applicationUrl": "https://elgatoapi",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_Kestrel__Certificates__Default__Path": "%userprofile%\\.aspnet\\https\\elgatoapi.crt",

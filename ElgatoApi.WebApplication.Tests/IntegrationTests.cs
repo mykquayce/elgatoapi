@@ -23,12 +23,14 @@ public sealed class IntegrationTests : IDisposable
 	[Fact]
 	public async Task Get()
 	{
-		var json = await _httpClient.GetStringAsync("/lights");
+		var json = await _httpClient.GetStringAsync("lights");
 
 		Assert.NotNull(json);
 		Assert.NotEmpty(json);
+		Assert.StartsWith("{", json);
+		Assert.NotEqual("{}", json);
 	}
 
 	[Fact]
-	public Task Put() => _httpClient.PutAsync("/lights", default);
+	public Task Put() => _httpClient.PutAsync("lights", default);
 }

@@ -1,12 +1,7 @@
 # pull images
-$images = @(
-	"mcr.microsoft.com/dotnet/aspnet:7.0",
-	"mcr.microsoft.com/dotnet/sdk:7.0")
-
-foreach ($image in $images) {
-	docker pull $image
-	if (!$?) { return; }
-}
+docker pull mcr.microsoft.com/dotnet/aspnet:7.0
+docker pull mcr.microsoft.com/dotnet/sdk:7.0
+if (!$?) { return; }
 
 # build
 docker build `
