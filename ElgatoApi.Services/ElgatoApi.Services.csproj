@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Helpers.Elgato" Version="3.2.2-rc2" />
-    <PackageReference Include="Helpers.NetworkDiscovery" Version="1.0.1-rc2" />
+    <PackageReference Include="Helpers.Elgato" Version="3.2.4" />
+    <PackageReference Include="Helpers.NetworkDiscovery" Version="1.0.4-preview" />
   </ItemGroup>
 
 </Project>
