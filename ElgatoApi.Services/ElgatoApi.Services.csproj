@@ -11,4 +11,8 @@
     <PackageReference Include="Helpers.NetworkDiscovery" Version="1.0.4-preview" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ElgatoApi.Models\ElgatoApi.Models.csproj" />
+  </ItemGroup>
+
 </Project>

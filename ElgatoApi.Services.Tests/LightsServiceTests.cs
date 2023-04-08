@@ -3,15 +3,16 @@ using Xunit;
 
 namespace ElgatoApi.Services.Tests;
 
-public class LightsServiceTests : IClassFixture<Fixtures.LibraryFixture>, IClassFixture<Fixtures.NetworkDiscoveryFixture>
+public class LightsServiceTests : IClassFixture<Fixtures.LibraryFixture>, IClassFixture<Fixtures.NetworkDiscoveryFixture>, IClassFixture<Fixtures.ConfigFixture>
 {
 	private readonly ILightsService _sut;
 
 	public LightsServiceTests(
 		Fixtures.LibraryFixture libraryFixture,
-		Fixtures.NetworkDiscoveryFixture networkDiscoveryFixture)
+		Fixtures.NetworkDiscoveryFixture networkDiscoveryFixture,
+		Fixtures.ConfigFixture configFixture)
 	{
-		_sut = new Concrete.LightsService(libraryFixture.Service, networkDiscoveryFixture.Client);
+		_sut = new Concrete.LightsService(libraryFixture.Service, networkDiscoveryFixture.Client, configFixture.Aliases);
 	}
 
 	[Theory]

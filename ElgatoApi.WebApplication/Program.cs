@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
 	.Configure<Helpers.NetworkDiscovery.Config>(builder.Configuration.GetSection("NetworkDiscovery"))
 	.Configure<Helpers.Identity.Config>(builder.Configuration.GetSection("Identity"))
+	.Configure<ElgatoApi.Models.Aliases>(builder.Configuration.GetSection("Aliases"))
 	.Configure<Helpers.Elgato.Config>(builder.Configuration.GetSection("Elgato"));
 
 builder.Services

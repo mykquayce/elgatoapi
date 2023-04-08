@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
+using System.Net;
 using Xunit;
 
 namespace ElgatoApi.WebApplication.Tests;
@@ -14,17 +15,16 @@ public sealed class IntegrationTests : IDisposable
 		_httpClient = _factory.CreateClient();
 	}
 
-	public void Dispose()
-	{
-		_httpClient.Dispose();
-		_factory.Dispose();
-	}
+	public void Dispose() => _factory.Dispose();
 
 	[Fact]
 	public async Task Get()
 	{
-		var json = await _httpClient.GetStringAsync("lights");
+		using var cts = new CancellationTokenSource(millisecondsDelay: 5_000);
+		using var response = await _httpClient.GetAsync("lights", cts.Token);
+		var json = await response.Content.ReadAsStringAsync(cts.Token);
 
+		Assert.True(HttpStatusCode.OK == response.StatusCode, json);
 		Assert.NotNull(json);
 		Assert.NotEmpty(json);
 		Assert.StartsWith("{", json);
@@ -32,5 +32,11 @@ public sealed class IntegrationTests : IDisposable
 	}
 
 	[Fact]
-	public Task Put() => _httpClient.PutAsync("lights", default);
+	public async Task Put()
+	{
+		using var cts = new CancellationTokenSource(millisecondsDelay: 5_000);
+		using var response = await _httpClient.PutAsync("lights", default, cts.Token);
+		var body = await response.Content.ReadAsStringAsync(cts.Token);
+		Assert.True(HttpStatusCode.OK == response.StatusCode, body);
+	}
 }

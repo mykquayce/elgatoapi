@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElgatoApi.Services.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElgatoApi.Services", "ElgatoApi.Services\ElgatoApi.Services.csproj", "{3ACDE10E-26DD-4BF5-B986-035BF6106598}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElgatoApi.Models", "ElgatoApi.Models\ElgatoApi.Models.csproj", "{F2BAC661-E520-4B25-8108-92621BB0071D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{3ACDE10E-26DD-4BF5-B986-035BF6106598}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ACDE10E-26DD-4BF5-B986-035BF6106598}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ACDE10E-26DD-4BF5-B986-035BF6106598}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2BAC661-E520-4B25-8108-92621BB0071D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2BAC661-E520-4B25-8108-92621BB0071D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2BAC661-E520-4B25-8108-92621BB0071D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2BAC661-E520-4B25-8108-92621BB0071D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

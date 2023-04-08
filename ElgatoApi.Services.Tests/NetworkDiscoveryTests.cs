@@ -14,8 +14,8 @@ public class NetworkDiscoveryTests : IClassFixture<Fixtures.NetworkDiscoveryFixt
 	}
 
 	[Theory]
-	[InlineData(5_000, "keylight")]
-	[InlineData(5_000, "lightstrip")]
+	[InlineData(5_000, "3c6a9d14d765")] //keylight
+	[InlineData(5_000, "3c6a9d187071")] //lightstrip
 	public async Task ResolveTests(int timeout, string alias)
 	{
 		var now = DateTime.UtcNow;

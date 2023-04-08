@@ -17,7 +17,7 @@ public class LightsController : ControllerBase
 	[HttpGet]
 	public async Task<IActionResult> GetAsync()
 	{
-		var (on, brightness, color, kelvins) = await _lightsService.GetLightAsync("keylight");
+		var (on, brightness, _, kelvins) = await _lightsService.GetLightAsync("keylight");
 		return Ok(new { on, brightness, kelvins, });
 	}
 
