@@ -9,7 +9,7 @@ $target = docker image inspect --format '{{.Created}}' eassbhhtgu/elgatoapi:late
 if ($base1 -gt $target -or $base2 -gt $target) {
 
 	docker build `
-		--secret id=ca_crt,src=${env:userprofile}\.aspnet\https\ca.crt `
+		--secret "id=ca_crt,src=${env:userprofile}\.aspnet\https\ca.crt" `
 		--tag eassbhhtgu/elgatoapi:latest `
 		.
 	if (!$?) { exit 1; }

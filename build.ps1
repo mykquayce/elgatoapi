@@ -5,7 +5,7 @@ if (!$?) { return; }
 
 # build
 docker build `
-	--secret id=ca_crt,src=${env:userprofile}\.aspnet\https\ca.crt `
+	--secret "id=ca_crt,src=${env:userprofile}\.aspnet\https\ca.crt" `
 	--tag eassbhhtgu/elgatoapi:latest `
 	.
 if (!$?) { return; }
