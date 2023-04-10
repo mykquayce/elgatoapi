@@ -13,4 +13,7 @@ EXPOSE 443/tcp
 ENV ASPNETCORE_ENVIRONMENT=Production
 WORKDIR /app
 COPY --from=build-env /app/publish .
+RUN apt update && apt install --assume-yes curl
+HEALTHCHECK --interval=1m --start-period=10s --timeout=5s \
+	CMD curl --fail --insecure --url https://localhost/lights || exit 1
 ENTRYPOINT ["dotnet", "ElgatoApi.WebApplication.dll"]
